@@ -1,26 +1,35 @@
 <?php
 
-namespace App\Models;
+namespace App\Http\Controllers;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Answer;
+use App\Models\Question;
+use Illuminate\Http\Request;
 
-class Answer extends Model
+class AnswerController extends Controller
 {
-    protected $fillable = [
-        'content',
-        'user_id',
-        'question_id'
-    ];
-
-    // Relation avec Question
-    public function question()
+    /**
+     * Stocker une nouvelle réponse
+     */
+    public function store(Request $request, Question $question = null)
     {
-        return $this->belongsTo(Question::class);
-    }
-
-    // Relation avec User
-    public function user()
-    {
-        return $this->belongsTo(User::class);
+        $validatedData = $request->validate([
+            'content' => 'required',
+            'question_id' => 'required_without:question|exists:questions,id',
+        ]);
+        
+        // Si question est fournie par la route
+        if ($question) {
+            $validatedData['question_id'] = $question->id;
+        }
+        
+        $answer = auth()->user()->answers()->create($validatedData);
+        
+        // Incrémenter le compteur de réponses
+        $question = Question::find($validatedData['question_id']);
+        $question->increment('answers_count');
+        
+        return redirect()->route('questions.show', $question)
+            ->with('success', 'Réponse ajoutée avec succès!');
     }
 }
