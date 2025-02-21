@@ -12,26 +12,26 @@ class AnswerController extends Controller
      * Stocker une nouvelle réponse
      */
     public function store(Request $request, Question $question = null)
-    {
-        $validatedData = $request->validate([
-            'content' => 'required',
-            'question_id' => 'required_without:question|exists:questions,id',
-        ]);
-        
-        // Si question est fournie par la route
-        if ($question) {
-            $validatedData['question_id'] = $question->id;
-        }
-        
-        $answer = auth()->user()->answers()->create($validatedData);
-        
-        // Incrémenter le compteur de réponses
-        $question = Question::find($validatedData['question_id']);
-        $question->increment('answers_count');
-        
-        return redirect()->route('questions.show', $question)
-            ->with('success', 'Réponse ajoutée avec succès!');
-    }
+{
+    $validatedData = $request->validate([
+        'content' => 'required',
+    ]);
+    
+    $user_id = auth()->id();
+    
+    // Créer la réponse directement
+    $answer = new Answer();
+    $answer->content = $validatedData['content'];
+    $answer->user_id = $user_id;
+    $answer->question_id = $question->id;
+    $answer->save();
+    
+    // Incrémenter le compteur de réponses
+    $question->increment('answers_count');
+    
+    return redirect()->route('questions.show', $question)
+        ->with('success', 'Réponse ajoutée avec succès!');
+}
 
     /**
      * Mettre à jour une réponse
