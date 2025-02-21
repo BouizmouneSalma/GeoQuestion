@@ -101,7 +101,10 @@ class QuestionController extends Controller
      */
     public function destroy(Question $question)
     {
-        $this->authorize('delete', $question);
+        if (auth()->id() !== $question->user_id) {
+            return redirect()->route('questions.index')
+                ->with('error', 'Vous n\'êtes pas autorisé à supprimer cette question.');
+        }
         
         $question->delete();
         
