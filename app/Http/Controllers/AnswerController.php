@@ -51,9 +51,7 @@ class AnswerController extends Controller
             ->with('success', 'Réponse mise à jour avec succès!');
     }
 
-    /**
-     * Supprimer une réponse
-     */
+    
     public function destroy(Answer $answer)
     {
         // Vérification que l'utilisateur est le propriétaire
