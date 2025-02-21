@@ -52,3 +52,6 @@ Route::get('/app', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// Route pour ajouter une réponse à une question spécifique
+Route::post('questions/{question}/answers', [AnswerController::class, 'store'])->name('questions.answers.store');
