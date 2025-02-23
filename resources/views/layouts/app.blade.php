@@ -133,7 +133,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
         <div class="container">
             <a class="navbar-brand" href="{{ url('/') }}">
-                <i class="bi bi-geo-alt-fill text-primary me-2"></i>{{ config('app.name', 'GeoQuestion') }}
+                <i class="bi bi-geo-alt-fill text-primary me-2">GeoQuestion</i>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
                 <span class="navbar-toggler-icon"></span>
@@ -154,7 +154,6 @@
                     </li>
                 </ul>
 
-                <!-- Menu droite -->
                 <ul class="navbar-nav ms-auto">
                     @guest
                         <li class="nav-item">
